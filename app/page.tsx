@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+import KakaoAd from "@/components/ui/KakaoAd";
 
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,9 +18,10 @@ export default function Home() {
     
     const todo: Todo = {
       id: Date.now().toString(),
-      content: newTodo.trim(),
-      completed: false,
-      createdAt: new Date(),
+      title: newTodo.trim(),
+      is_completed: false,
+      created_at: new Date().toISOString(),
+      user_id: ""
     };
     
     setTodos([todo, ...todos]);
@@ -28,7 +30,7 @@ export default function Home() {
 
   const toggleTodo = (id: string) => {
     setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      todo.id === id ? { ...todo, is_completed: !todo.is_completed } : todo
     ));
   };
 
@@ -42,7 +44,7 @@ export default function Home() {
     }
   };
 
-  const completedCount = todos.filter(todo => todo.completed).length;
+  const completedCount = todos.filter(todo => todo.is_completed).length;
   const totalCount = todos.length;
 
   return (
@@ -97,6 +99,15 @@ export default function Home() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* 카카오 애드핏 광고 */}
+        <div className="flex justify-center">
+          <KakaoAd
+            unit="DAN-Pbw7BR1WscZOdBgB"
+            width="728"
+            height="90"
+          />
         </div>
       </div>
     </div>

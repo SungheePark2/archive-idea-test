@@ -2,7 +2,7 @@ import { Todo } from "../types/todo";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -25,20 +25,20 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         <div className="p-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <Checkbox
-              checked={todo.completed}
+              checked={todo.is_completed}
               onCheckedChange={() => onToggle(todo.id)}
               className="h-5 w-5 transition-all duration-200"
             />
             <div className="flex flex-col gap-1 min-w-0">
               <span className={`${
-                todo.completed 
+                todo.is_completed 
                   ? "line-through text-muted-foreground" 
                   : "text-foreground"
               } transition-all duration-200 truncate`}>
-                {todo.content}
+                {todo.title}
               </span>
               <span className="text-xs text-muted-foreground">
-                {format(todo.createdAt, "M월 d일 a h:mm", { locale: ko })}
+                {format(parseISO(todo.created_at), "M월 d일 a h:mm", { locale: ko })}
               </span>
             </div>
           </div>
