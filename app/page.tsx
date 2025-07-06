@@ -1,5 +1,4 @@
-"use client";
-
+import { Metadata } from "next";
 import { useState } from "react";
 import { Todo } from "./types/todo";
 import { TodoItem } from "./components/TodoItem";
@@ -9,6 +8,16 @@ import { Plus } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import KakaoAd from "@/components/ui/KakaoAd";
 
+// 페이지별 메타데이터 설정
+export const metadata: Metadata = {
+  title: "할 일 목록 | Archive Idea",
+  description: "효율적인 할 일 관리를 위한 심플한 투두리스트 애플리케이션입니다.",
+  alternates: {
+    canonical: "https://archive-idea-test-azure.vercel.app",
+  },
+};
+
+// 클라이언트 컴포넌트
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
@@ -48,18 +57,18 @@ export default function Home() {
   const totalCount = todos.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <div className="max-w-2xl mx-auto p-8 space-y-8">
-        <div className="space-y-2 text-center">
+        <header className="space-y-2 text-center">
           <h1 className="text-4xl font-bold tracking-tight">할 일 목록</h1>
           {totalCount > 0 && (
             <p className="text-muted-foreground">
               총 {totalCount}개 중 {completedCount}개 완료
             </p>
           )}
-        </div>
+        </header>
         
-        <div className="relative">
+        <section className="relative" aria-label="할 일 입력 및 목록">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-secondary/20 blur-3xl opacity-50" />
           <div className="relative bg-card/50 backdrop-blur-xl rounded-lg p-8 shadow-lg">
             <div className="flex gap-2 mb-8">
@@ -69,8 +78,9 @@ export default function Home() {
                 onKeyPress={handleKeyPress}
                 placeholder="새로운 할 일을 입력하세요"
                 className="flex-1 bg-background/50"
+                aria-label="할 일 입력"
               />
-              <Button onClick={addTodo} size="icon">
+              <Button onClick={addTodo} size="icon" aria-label="할 일 추가">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -88,7 +98,7 @@ export default function Home() {
               </AnimatePresence>
               
               {todos.length === 0 && (
-                <div className="text-center py-12">
+                <div className="text-center py-12" role="status">
                   <p className="text-muted-foreground mb-2">
                     아직 할 일이 없습니다
                   </p>
@@ -99,17 +109,16 @@ export default function Home() {
               )}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* 카카오 애드핏 광고 */}
-        <div className="flex justify-center">
+        <aside className="flex justify-center">
           <KakaoAd
             unit="DAN-Pbw7BR1WscZOdBgB"
             width="728"
             height="90"
           />
-        </div>
+        </aside>
       </div>
-    </div>
+    </main>
   );
 }
