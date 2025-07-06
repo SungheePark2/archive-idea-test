@@ -5,6 +5,8 @@ import { Todo } from "./types/todo";
 import { TodoItem } from "./components/TodoItem";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -40,36 +42,61 @@ export default function Home() {
     }
   };
 
-  return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-center">할 일 목록</h1>
-        
-        <div className="flex gap-2">
-          <Input
-            value={newTodo}
-            onChange={(e) => setNewTodo(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="할 일을 입력하세요"
-            className="flex-1"
-          />
-          <Button onClick={addTodo}>추가</Button>
-        </div>
+  const completedCount = todos.filter(todo => todo.completed).length;
+  const totalCount = todos.length;
 
-        <div className="space-y-3">
-          {todos.map(todo => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onToggle={toggleTodo}
-              onDelete={deleteTodo}
-            />
-          ))}
-          {todos.length === 0 && (
-            <p className="text-center text-muted-foreground">
-              할 일이 없습니다. 새로운 할 일을 추가해보세요!
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <div className="max-w-2xl mx-auto p-8 space-y-8">
+        <div className="space-y-2 text-center">
+          <h1 className="text-4xl font-bold tracking-tight">할 일 목록</h1>
+          {totalCount > 0 && (
+            <p className="text-muted-foreground">
+              총 {totalCount}개 중 {completedCount}개 완료
             </p>
           )}
+        </div>
+        
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-secondary/20 blur-3xl opacity-50" />
+          <div className="relative bg-card/50 backdrop-blur-xl rounded-lg p-8 shadow-lg">
+            <div className="flex gap-2 mb-8">
+              <Input
+                value={newTodo}
+                onChange={(e) => setNewTodo(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="새로운 할 일을 입력하세요"
+                className="flex-1 bg-background/50"
+              />
+              <Button onClick={addTodo} size="icon">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              <AnimatePresence initial={false}>
+                {todos.map(todo => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                  />
+                ))}
+              </AnimatePresence>
+              
+              {todos.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground mb-2">
+                    아직 할 일이 없습니다
+                  </p>
+                  <p className="text-sm text-muted-foreground/80">
+                    위 입력창에 할 일을 입력하고 추가해보세요!
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
